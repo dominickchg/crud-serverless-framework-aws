@@ -1,4 +1,4 @@
-import boto3, json, os
+import boto3, json, os, uuid
 
 client = boto3.resource('dynamodb')
 
@@ -12,15 +12,18 @@ if IS_OFFLINE:
 
 table = client.Table('usersTable')
 
-def deleteUsers(event, context):
+def getUsers(event, context):
     userId = event['pathParameters']['id']
-    result = table.delete_item(Key = {'pk':userId})
 
-    body = json.dumps({'message' : f"user {userId} deleted"})
-
-    response = {
-        'statusCode': result['ResponseMetadata']['HTTPStatusCode'],
-        'body' : body
+    params = {
+        'ExpressionAttributeValues': { ":pk": userId },
+        'KeyConditionExpression': "pk = :pk",
+        'TableName': "usersTable",
     }
 
-    return response
+    response = table.query(**params)
+
+    return {
+        'statusCode': 200,
+        'body': json.dumps(response['Items'])
+    }

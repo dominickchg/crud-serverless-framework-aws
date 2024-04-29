@@ -2,7 +2,7 @@ service: crud-serverless-users
 
 provider:
   name: aws
-  runtime: nodejs16.x
+  runtime: python3.12
   iam:
     role:
       statements:
@@ -36,7 +36,7 @@ functions:
     handler: hola-mundo/handler.hello
     package:
       patterns:
-        - "hola-mundo/handler.js"
+        - "hola-mundo/handler.py"
     events:
       - http:
           path: users/hello
@@ -45,7 +45,7 @@ functions:
     handler: getUsers/handler.getUsers
     package:
       patterns:
-        - "getUsers/handler.js"
+        - "getUsers/handler.py"
     events:
       - http:
           path: users/{id}
@@ -54,7 +54,7 @@ functions:
     handler: createUsers/handler.createUsers
     package:
       patterns:
-        - "createUsers/handler.js"
+        - "createUsers/handler.py"
     events:
       - http:
           path: users
@@ -63,7 +63,7 @@ functions:
     handler: updateUsers/handler.updateUsers
     package:
       patterns:
-        - "updateUsers/handler.js"
+        - "updateUsers/handler.py"
     events:
       - http:
           path: users/{id}
@@ -73,7 +73,6 @@ functions:
     package:
       patterns:
         - "deleteUsers/handler.py"
-    runtime: python3.12
     events:
       - http:
           path: users/{id}
